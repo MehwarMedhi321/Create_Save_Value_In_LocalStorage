@@ -1,45 +1,80 @@
-// localStorage.setItem("name","val");
+ 
+
+ 
+let ToDoform = document.querySelector("form");
+let MainDiv = document.getElementById("main");
+
+ToDoform.addEventListener("submit", (event)=>{
+    let Name = event.target.UserName.value;
+    let Email = event.target.Email.value;
+    let Number = event.target.number.value;
+
+     let UserData = JSON.parse(localStorage.getItem("UserData")) ?? [];
+     UserData.push({
+        "Name":Name,
+        "Email":Email,
+        "Number":Number,
+     });
+
+     localStorage.setItem("UserData",JSON.stringify(UserData));
+     event.target.reset();
+
+     displayData();
 
 
+   event.preventDefault();
+   
+});
 
-let form=document.querySelector("form");
-let main=document.querySelector(".main");
+let displayData =()=> {
+    let UserData = JSON.parse(localStorage.getItem("UserData")) ?? [];
+    let finalDataDisplay = "";
+    UserData.forEach((element,i) => {
 
-form.addEventListener("submit",(e)=>{
-    // console.log(e);
-    let name=e.target.uname.value;
-    let email=e.target.email.value;
-    let phone=e.target.phone.value;
-    // console.log(name);
-    // console.log(email);
-    // console.log(phone);
-    let userDate=JSON.parse(localStorage.getItem("userDeatils")) ?? [];
-    userDate.push({
-        "name":name,
-        "email":email,
-        "phone":phone
-    })
-    localStorage.setItem("userDeatils",JSON.stringify(userDate));
-    displayData();
-    e.preventDefault();
-})
+        finalDataDisplay += `
+        <div class="items">
+        <span onclick="remove(${i})">&times;</span>
+        <h4>Your Name</h4>
+        <div>${element.Name}</div>
 
-function displayData(){
-    let userDate=JSON.parse(localStorage.getItem("userDeatils")) ?? [];
-   let finalData='';
-   userDate.forEach((element,i)=>{
-finalData +=`<div class="items">
-			<span>&times;</span>
-			<h5>Name</h5>
-			<div>${element.name}</div>
-		
-			<h5>Email</h5>
-			<div>${element.email}</div>
+        <h4>Your Email</h4>
+        <div>${element.Email}</div>
 
-			<h5>Phone-no</h5>
-			<div>${element.phone}</div>
-		</div>`
-   });
-  main.innerHTML+finalData
+        <h4>Mobile Number</h4>
+        <div>${element.Number}</div>
+    </div>`;
+    });
+
+    MainDiv.innerHTML = finalDataDisplay;
 }
+
+function remove(index) {
+
+    let UserData = JSON.parse(localStorage.getItem("UserData")) ?? [];
+    UserData.splice(index,1);
+    localStorage.setItem("UserData",JSON.stringify(UserData));
+    displayData();
+
+};
+
+
 displayData();
+
+
+// For Practice..Only!
+
+// let UserName= [
+//     {
+//         "Name": "Hadi",
+//         "Age": "19"
+//     },
+//     {
+//         "Name":"Ali",
+//         "Age":"20"
+//     },
+// ]
+
+// localStorage.setItem("Name",JSON.stringify(UserName));
+
+// console.log(JSON.parse(localStorage.getItem("Name")));
+// console.log(localStorage)
